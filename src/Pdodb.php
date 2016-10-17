@@ -1,26 +1,30 @@
 <?php
-class PDOdb
+namespace Kruul;
+use \PDO;
+
+class Pdodb
 {
     private $config;
     private $pdo;
     private $sql;
     private $sth;
 
-    public function __construct(Config $config){
+    public function __construct($config){
         $this->config = $config;
     }
 
     public function query($sql, $params = null){
         $this->connect();
-        if ($this->sql!=$sql) $this->sql=$sql;
-
-        $sth = $this->pdo->prepare($this->sql);
+        if ($this->sql!=$sql) {
+            $this->sql=$sql;
+            $this->sth = $this->pdo->prepare($this->sql);
+        }
         $params = is_array($params) ? $params : is_null($params) ? null : [$params];
 
-        if ($params && $sth->execute($params)) {
-            return $sth;
-        } elseif ($sth->execute()) {
-            return $sth;
+        if ($params && $this->sth->execute($params)) {
+            return $this->sth;
+        } elseif ($this->sth->execute()) {
+            return $this->sth;
         }
 
         return false;

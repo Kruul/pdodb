@@ -23,7 +23,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Kruul\\PDOdb\\": "src"
+            "Kruul\\PDOdb\\": "src/Pdodb"
         }
     },
     "autoload-dev": {
