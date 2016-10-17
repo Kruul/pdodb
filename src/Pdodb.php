@@ -1,6 +1,14 @@
 <?php
 namespace Kruul;
 use \PDO;
+use \Exception;
+/*
+Pdodb - simple PDO wrapper
+
+Author: AShvager
+Mailto: alex.shvager@gmail.com
+Edited: 17.10.2016
+*/
 
 class Pdodb
 {
@@ -26,28 +34,19 @@ class Pdodb
         } elseif ($this->sth->execute()) {
             return $this->sth;
         }
-
         return false;
     }
 
     private function connect(){
-        if (!$this->pdo) {
-            $driver=$this->config['driver'];
-            $host=$this->config['host'];
-            $database=$this->config['database'];
-            $charset=$this->config['charset'];
-            $username=$this->config['username'];
-            $password=$this->config['password'];
-
-            try {
-                $dsn = $driver.':host=' . $host . ';dbname=' . $database . ';charset=' . $charset;
-                $this->pdo = new PDO($dsn, $username, $password);
-
-                $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
-            } catch (Exception $e) {
-                die($e->getMessage());
-            }
+      if (!$this->pdo) {
+        try {
+          $dsn = $this->config['driver'].':host=' . $this->config['host'] . ';dbname=' . $this->config['database'] . ';charset=' . $this->config['charset'];
+          $this->pdo = new PDO($dsn, $this->config['username'], $this->config['password']);
+          $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+          $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
+        } catch (Exception $e) {
+              throw new Exception($e->getMessage(), 1);
         }
+      }
     }
 }
