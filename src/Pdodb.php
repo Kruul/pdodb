@@ -18,7 +18,8 @@ class Pdodb
     private $sth;
 
     public function __construct($config){
-        $this->config = $config;
+        $this->config=array('driver'=>'','host'=>'','database'=>'','charset'=>'');
+        $this->config = array_merge($this->config,$config);
     }
 
     public function query($sql, $params = null){
@@ -40,7 +41,7 @@ class Pdodb
     private function connect(){
       if (!$this->pdo) {
         try {
-          $dsn = $this->config['driver'].':host=' . $this->config['host'] . ';dbname=' . $this->config['database'] . ';charset=' . $this->config['charset'];
+          echo $dsn = $this->config['driver'].':host=' . $this->config['host'] . ';dbname=' . $this->config['database'] . ';charset=' . $this->config['charset'];
           $this->pdo = new PDO($dsn, $this->config['username'], $this->config['password']);
           $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
           $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
