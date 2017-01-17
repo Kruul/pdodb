@@ -41,7 +41,7 @@ class Pdodb
     private function connect(){
       if (!$this->pdo) {
         try {
-          echo $dsn = $this->config['driver'].':host=' . $this->config['host'] . ';dbname=' . $this->config['database'] . ';charset=' . $this->config['charset'];
+          $dsn = $this->config['driver'].':host=' . $this->config['host'] . ';dbname=' . $this->config['database'] . ';charset=' . $this->config['charset'];
           $this->pdo = new PDO($dsn, $this->config['username'], $this->config['password']);
           $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
           $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
