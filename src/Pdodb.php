@@ -7,7 +7,10 @@ Pdodb - simple PDO wrapper
 
 Author: AShvager
 Mailto: alex.shvager@gmail.com
-Edited: 17.10.2016
+Start: 17.10.2016
+2017-01-17 + setAttribute
+2017-01-17 * early initialization setAttribute
+
 */
 
 class Pdodb
@@ -16,10 +19,12 @@ class Pdodb
     private $pdo;
     private $sql;
     private $sth;
+    private $attribute;
 
     public function __construct($config){
-        $this->config=array('driver'=>'','host'=>'','database'=>'','charset'=>'');
+        $this->config=array('driver'=>'','host'=>'','database'=>'','charset'=>'','username'=>'','password'=>'');
         $this->config = array_merge($this->config,$config);
+        $this->attribute=array(PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION,PDO::ATTR_DEFAULT_FETCH_MODE=>PDO::FETCH_OBJ);
     }
 
     public function query($sql, $params = null){
@@ -38,13 +43,20 @@ class Pdodb
         return false;
     }
 
+    public function setAttribute($attribute,$option){
+      $this->attribute[$attribute]=$option;
+      if ($this->pdo) $this->pdo->setAttribute($attribute, $option);
+      return $this;
+    }
+
     private function connect(){
       if (!$this->pdo) {
         try {
           $dsn = $this->config['driver'].':host=' . $this->config['host'] . ';dbname=' . $this->config['database'] . ';charset=' . $this->config['charset'];
           $this->pdo = new PDO($dsn, $this->config['username'], $this->config['password']);
-          $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-          $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
+          foreach ($this->attribute as $attribute => $value) {
+            $this->pdo->setAttribute($attribute,$value);
+          }
         } catch (Exception $e) {
               throw new Exception($e->getMessage(), 1);
         }
