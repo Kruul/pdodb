@@ -10,8 +10,10 @@ Mailto: alex.shvager@gmail.com
 Start: 17.10.2016
 2017-01-17 + setAttribute
 2017-01-17 * early initialization setAttribute
+2017-01-20 * fix with parameters
 
 */
+error_reporting(E_ALL);
 
 class Pdodb
 {
@@ -33,8 +35,7 @@ class Pdodb
             $this->sql=$sql;
             $this->sth = $this->pdo->prepare($this->sql);
         }
-        $params = is_array($params) ? $params : is_null($params) ? null : [$params];
-
+        $params = is_array($params) ? $params : (is_null($params) ? null : [$params]);
         if ($params && $this->sth->execute($params)) {
             return $this->sth;
         } elseif ($this->sth->execute()) {
