@@ -11,6 +11,7 @@ Start: 17.10.2016
 2017-01-17 + setAttribute
 2017-01-17 * early initialization setAttribute
 2017-01-20 * fix with parameters
+2017-02-15 + PDO::ATTR_DEFAULT_FETCH_MODE
 
 */
 error_reporting(E_ALL);
@@ -26,10 +27,13 @@ class Pdodb
     public function __construct($config){
         $this->config=array('driver'=>'','host'=>'','database'=>'','charset'=>'','username'=>'','password'=>'');
         $this->config = array_merge($this->config,$config);
-        $this->attribute=array(PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION,PDO::ATTR_DEFAULT_FETCH_MODE=>PDO::FETCH_OBJ);
+        $this->attribute=array(PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION,
+                               PDO::ATTR_DEFAULT_FETCH_MODE=>PDO::FETCH_OBJ,
+                               PDO::ATTR_CASE=>PDO::CASE_LOWER
+                              );
     }
 
-    public function query($sql, $params = null){
+    public function query($sql, $params = null){//echo $sql;
         $this->connect();
         if ($this->sql!=$sql) {
             $this->sql=$sql;
