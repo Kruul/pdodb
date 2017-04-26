@@ -24,13 +24,14 @@ class Pdodb
     private $sth;
     private $attribute;
 
-    public function __construct($config){
+    public function __construct($config,$attributes=array()){
         $this->config=array('driver'=>'','host'=>'','database'=>'','charset'=>'','username'=>'','password'=>'');
         $this->config = array_merge($this->config,$config);
-        $this->attribute=array(PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION,
-                               PDO::ATTR_DEFAULT_FETCH_MODE=>PDO::FETCH_OBJ,
-                               PDO::ATTR_CASE=>PDO::CASE_LOWER
+        $this->attribute=array(PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+                               PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
+                               PDO::ATTR_CASE               => PDO::CASE_LOWER
                               );
+        $this->attribute=array_replace($this->attribute,$attributes);//print_r($this->attribute);exit;
     }
 
     public function query($sql, $params = null){//echo $sql;
