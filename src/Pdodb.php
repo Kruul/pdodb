@@ -12,6 +12,7 @@ Start: 17.10.2016
 2017-01-17 * early initialization setAttribute
 2017-01-20 * fix with parameters
 2017-02-15 + PDO::ATTR_DEFAULT_FETCH_MODE
+2017-11-16 + Work with Transactions
 
 */
 error_reporting(E_ALL);
@@ -23,6 +24,7 @@ class Pdodb
     private $sql;
     private $sth;
     private $attribute;
+    private $transaction;
 
     public function __construct($config,$attributes=array()){
         $this->config=array('driver'=>'','host'=>'','database'=>'','charset'=>'','username'=>'','password'=>'');
@@ -63,9 +65,39 @@ class Pdodb
           foreach ($this->attribute as $attribute => $value) {
             $this->pdo->setAttribute($attribute,$value);
           }
+          if ($this->transaction) {
+            $this->pdo->beginTransaction();
+          }
         } catch (Exception $e) {
               throw new Exception($e->getMessage(), 1);
         }
       }
     }
+
+    public function BeginTransaction(){
+        if ($this->pdo) {
+            $this->pdo->begintransaction();
+        } else {
+          $this->transaction=true;
+        }
+        return $this;
+    }
+
+    public function CommitTransaction(){
+        if ($this->pdo) {
+            $this->pdo->commit();
+            $this->transaction=null;
+        }
+        return $this;
+    }
+
+    public function RollbackTransaction(){
+        if ($this->pdo) {
+            $this->pdo->rollback();
+            $this->transaction=null;
+        }
+        return $this;
+    }
+
+
 }
