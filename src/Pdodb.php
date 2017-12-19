@@ -4,6 +4,7 @@ use \PDO;
 use \Exception;
 /*
 Pdodb - simple PDO wrapper
+ver 0.1.2
 
 Author: AShvager
 Mailto: alex.shvager@gmail.com
